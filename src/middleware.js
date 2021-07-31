@@ -14,3 +14,5 @@ function existeAuto(req, res, next) {
         next();
     }
 }
+
+module.exports = { existeAuto }

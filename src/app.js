@@ -8,11 +8,11 @@ const swaggerUI = require('swagger-ui-express');
 const swaggerOptions = {
     swaggerDefinition: {
       info: {
-        title: '????',
-        version: '1.0.1'
+        title: 'Automotores',
+        version: '1.0.0'
       }
     },
-    apis: ['./app.js'],
+    apis: ['./src/app.js'],
   };
   
   const swaggerDocs = swaggerJsDoc(swaggerOptions);
@@ -20,20 +20,24 @@ const swaggerOptions = {
   //Importacion de archivos particulares
 
   const {arrayInfo} = require('./info');
+  const {existeAuto} = require('./middleware');
 
   //Inicializacion del server
   const app = express();
 
   app.use(express.json());
-  app.use(motgsn('dev'));
+  app.use(morgan('dev'));
 
 
-   /**
+/**
  * @swagger
  * /:
  *  get:
  *     sumary: programa
- *     description : 
+ *     description: esto
+ *     responses:
+ *          200:
+ *               description: OK
  */
 app.get('/', function (req, res) {
     res.send({ programa: "automotores"})
@@ -59,6 +63,9 @@ app.get('/automotores', function (req, res) {
  *  post:
  *     sumary: automotores
  *     description: Listado de automotores
+ *     responses:
+ *          200:
+ *               description: OK
  */
 app.post('/automotores', function (req, res) {
     let auto = req.body;
@@ -71,27 +78,27 @@ app.post('/automotores', function (req, res) {
  * @swagger
  * /automotores/{id}:
  *  get:
- *     sumary: Auto por Id
- *     description: Informacion de automotores.
- *     parameters:
- *           in: path
- *           name: id
- *           required: true
- *           description: ID del auto a recuperar.
- *           schema:
- *             type: integer
- *             example: 1
- *        responses:
- *           200:
- *             description: Listado ok.
+ *      sumary: Auto por Id
+ *      description: Informacion de automotores.
+ *      parameters:
+ *      -   in: path
+ *          name: id
+ *          required: true
+ *          description: ID del auto a recuperar.
+ *          schema:
+ *              type: integer
+ *              example: 1
+ *      responses:
+ *          200:
+ *              description: Listado ok.
  */
-app.get('/automotores/:id', exiteAuto,  function (req, res) {
+app.get('/automotores/:id', existeAuto,  function (req, res) {
     let auto = req.auto;
     console.log(auto);
     res.send(auto);
 });
 
-app.delete('/automotores/:id', exiteAuto,  function (req, res) {
+app.delete('/automotores/:id', existeAuto,  function (req, res) {
     let auto = req.auto;
     let index = req.index
     resultado = 'Borrado segun el indice: ' + index
@@ -99,7 +106,7 @@ app.delete('/automotores/:id', exiteAuto,  function (req, res) {
     res.send({ resultado, resultado, valor: auto});
 });
 
-app.putt('/automotores/:id', exiteAuto,  function (req, res) {
+app.put('/automotores/:id', existeAuto,  function (req, res) {
     let autoNuevo = req.body;
     let index = req.index
     resultado = 'Actualizacion segun el indice: ' + index
